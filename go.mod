@@ -1,4 +1,4 @@
-module github.com/ymm/go-nft
+module github.com/ymm135/go-nft
 
 go 1.16
 
