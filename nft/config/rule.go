@@ -23,7 +23,7 @@ import (
 	"bytes"
 	"encoding/json"
 
-	"github.com/networkplumbing/go-nft/nft/schema"
+	"github.com/ymm135/go-nft/nft/schema"
 )
 
 // AddRule appends the given rule to the nftable config.

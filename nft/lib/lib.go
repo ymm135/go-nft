@@ -30,7 +30,7 @@ import (
 	"fmt"
 	"unsafe"
 
-	"github.com/networkplumbing/go-nft/nft"
+	"github.com/ymm135/go-nft/nft"
 )
 
 const (

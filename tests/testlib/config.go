@@ -23,8 +23,8 @@ import (
 	"sort"
 	"testing"
 
-	"github.com/networkplumbing/go-nft/nft"
-	"github.com/networkplumbing/go-nft/nft/schema"
+	"github.com/ymm135/go-nft/nft"
+	"github.com/ymm135/go-nft/nft/schema"
 )
 
 func RunTestWithFlushTable(t *testing.T, test func(t *testing.T)) {

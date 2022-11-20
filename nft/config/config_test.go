@@ -25,8 +25,8 @@ import (
 
 	assert "github.com/stretchr/testify/require"
 
-	nftconfig "github.com/networkplumbing/go-nft/nft/config"
-	"github.com/networkplumbing/go-nft/nft/schema"
+	nftconfig "github.com/ymm135/go-nft/nft/config"
+	"github.com/ymm135/go-nft/nft/schema"
 )
 
 func TestDefineEmptyConfig(t *testing.T) {

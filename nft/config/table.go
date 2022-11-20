@@ -20,7 +20,7 @@
 package config
 
 import (
-	"github.com/networkplumbing/go-nft/nft/schema"
+	"github.com/ymm135/go-nft/nft/schema"
 )
 
 // AddTable appends the given table to the nftable config.

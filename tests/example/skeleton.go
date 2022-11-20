@@ -22,9 +22,9 @@ package example
 import (
 	"fmt"
 
-	"github.com/networkplumbing/go-nft/tests/testlib"
+	"github.com/ymm135/go-nft/tests/testlib"
 
-	"github.com/networkplumbing/go-nft/nft"
+	"github.com/ymm135/go-nft/nft"
 )
 
 type buildConfigT func() *nft.Config

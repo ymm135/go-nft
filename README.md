@@ -1,8 +1,8 @@
 # go-nft
 
 [![Licensed under Apache License version 2.0](https://img.shields.io/github/license/kubevirt/kubevirt.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Build Workflow](https://github.com/networkplumbing/go-nft/actions/workflows/main.yml/badge.svg)](https://github.com/networkplumbing/go-nft/actions/workflows/main.yml)
-[![Go Report Card](https://goreportcard.com/badge/github.com/networkplumbing/go-nft)](https://goreportcard.com/report/github.com/networkplumbing/go-nft)
+[![Build Workflow](https://github.com/ymm135/go-nft/actions/workflows/main.yml/badge.svg)](https://github.com/ymm135/go-nft/actions/workflows/main.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/ymm135/go-nft)](https://goreportcard.com/report/github.com/ymm135/go-nft)
 
 Go bindings for nft utility.
 

@@ -27,7 +27,7 @@ import (
 	"os/exec"
 	"strings"
 
-	nftconfig "github.com/networkplumbing/go-nft/nft/config"
+	nftconfig "github.com/ymm135/go-nft/nft/config"
 )
 
 const (

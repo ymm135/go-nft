@@ -24,10 +24,10 @@ import (
 
 	assert "github.com/stretchr/testify/require"
 
-	"github.com/networkplumbing/go-nft/nft"
-	nftlib "github.com/networkplumbing/go-nft/nft/lib"
+	"github.com/ymm135/go-nft/nft"
+	nftlib "github.com/ymm135/go-nft/nft/lib"
 
-	"github.com/networkplumbing/go-nft/tests/testlib"
+	"github.com/ymm135/go-nft/tests/testlib"
 )
 
 func TestNftlib(t *testing.T) {

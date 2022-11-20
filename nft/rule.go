@@ -20,7 +20,7 @@
 package nft
 
 import (
-	"github.com/networkplumbing/go-nft/nft/schema"
+	"github.com/ymm135/go-nft/nft/schema"
 )
 
 // NewRule returns a new schema rule structure.

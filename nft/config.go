@@ -20,8 +20,8 @@
 package nft
 
 import (
-	nftconfig "github.com/networkplumbing/go-nft/nft/config"
-	nftexec "github.com/networkplumbing/go-nft/nft/exec"
+	nftconfig "github.com/ymm135/go-nft/nft/config"
+	nftexec "github.com/ymm135/go-nft/nft/exec"
 )
 
 type Config = nftconfig.Config
