@@ -39,6 +39,7 @@ type Statement struct {
 	Match   *Match   `json:"match,omitempty"`
 	Verdict
 	Nat
+	RawData json.RawMessage `json:"-"`
 }
 
 type Counter struct {
@@ -127,6 +128,26 @@ type Expression struct {
 	// Example:
 	// `schema.Expression{RowData: json.RawMessage(`{"meta":{"key":"iifname"}}`)}`
 	RowData json.RawMessage `json:"-"`
+	Set     *[]SetElement   `json:"set,omitempty"`
+}
+
+type SetElement struct {
+	Value    string    `json:"-"`
+	Range    *Range    `json:"-"`
+	IPPrefix *IPPrefix `json:"-"`
+}
+
+type Range struct {
+	Range [2]string `json:"range,omitempty"`
+}
+
+type IPPrefix struct {
+	Prefix Prefix `json:"prefix,omitempty"`
+}
+
+type Prefix struct {
+	Addr string `json:"addr"`
+	Len  int    `json:"len"`
 }
 
 type Payload struct {
@@ -195,6 +216,11 @@ func (s Statement) MarshalJSON() ([]byte, error) {
 	type _Statement Statement
 	statement := _Statement(s)
 
+	// raw
+	if s.RawData != nil {
+		return s.RawData, nil
+	}
+
 	// Convert to a dynamic structure
 	data, err := json.Marshal(statement)
 	if err != nil {
@@ -253,6 +279,10 @@ func (s *Statement) UnmarshalJSON(data []byte) error {
 		s.Redirect = &Redirect{Enabled: true}
 	}
 
+	if !s.Accept && !s.Continue && !s.Drop && !s.Return && s.Masquerade == nil && s.Redirect == nil {
+		s.RawData = data
+	}
+
 	return nil
 }
 
@@ -307,6 +337,48 @@ func (e *Expression) UnmarshalJSON(data []byte) error {
 
 	if e.String == nil && e.Float64 == nil && e.Bool == nil && e.Payload == nil {
 		e.RowData = data
+	}
+
+	return nil
+}
+
+func (s SetElement) MarshalJSON() ([]byte, error) {
+	var dynamicStruct interface{}
+	switch {
+	case len(s.Value) != 0:
+		dynamicStruct = s.Value
+	case s.Range != nil:
+		dynamicStruct = s.Range
+	case s.IPPrefix != nil:
+		dynamicStruct = s.IPPrefix
+	default:
+		type _Expression SetElement
+		dynamicStruct = _Expression(s)
+	}
+
+	return json.Marshal(dynamicStruct)
+}
+
+func (s *SetElement) UnmarshalJSON(data []byte) error {
+	var dynamicStruct interface{}
+	if err := json.Unmarshal(data, &dynamicStruct); err != nil {
+		return err
+	}
+
+	switch dynamicStruct.(type) {
+	case string:
+		d := dynamicStruct.(string)
+		s.Value = d
+	case map[string]interface{}:
+		type _SetElement SetElement
+		setElement := _SetElement(*s)
+
+		if err := json.Unmarshal(data, &setElement); err != nil {
+			return err
+		}
+		*s = SetElement(setElement)
+	default:
+		return fmt.Errorf("unsupported field type in expression: %T(%v)", dynamicStruct, dynamicStruct)
 	}
 
 	return nil

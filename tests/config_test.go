@@ -91,3 +91,55 @@ func testApplyConfigWithStatements(t *testing.T, statements ...schema.Statement)
 	newConfig = testlib.NormalizeConfigForComparison(newConfig)
 	assert.Equal(t, config.Nftables, newConfig.Nftables)
 }
+
+func TestApplyConfigWithRawJSON(t *testing.T) {
+	const tableName = "my-table"
+	config := nft.NewConfig()
+	table := nft.NewTable(tableName, nft.FamilyIP)
+	config.AddTable(table)
+
+	const chainName = "mychain"
+	chain := nft.NewChain(table, chainName, nil, nil, nil, nil)
+	config.AddChain(chain)
+
+	ifaceName := "nic0"
+	// {Verdict: schema.Accept()},
+	statements := []schema.Statement{
+		{Match: &schema.Match{
+			Op:    schema.OperEQ,
+			Left:  schema.Expression{RowData: []byte(`{"meta":{"key":"iifname"}}`)},
+			Right: schema.Expression{String: &ifaceName},
+		}},
+		{Match: &schema.Match{
+			Op:   schema.OperEQ,
+			Left: schema.Expression{Payload: &schema.Payload{Protocol: schema.PayloadProtocolIP4, Field: schema.PayloadFieldIPSAddr}},
+			Right: schema.Expression{Set: &[]schema.SetElement{
+				{Value: "192.168.0.1"},
+				{Value: "192.168.0.2"},
+				{Range: &schema.Range{Range: [2]string{"192.168.1.0", "192.168.1.100"}}},
+				{IPPrefix: &schema.IPPrefix{Prefix: schema.Prefix{Addr: "192.168.2.1", Len: 24}}}}},
+		}},
+		{Match: &schema.Match{
+			Op:   schema.OperEQ,
+			Left: schema.Expression{RowData: []byte(`{"meta":{"key":"time"}}`)},
+			Right: schema.Expression{Set: &[]schema.SetElement{
+				{Range: &schema.Range{Range: [2]string{"2022-11-01 18:00:00", "2022-11-01 19:00:00"}}},
+				{Range: &schema.Range{Range: [2]string{"2022-11-10 18:00:00", "2022-11-10 19:00:00"}}},
+			}},
+		}},
+		{RawData: []byte(`{"log": { "prifix":"accept-log"} }`)},
+		{RawData: []byte(`{"accept": null}`)},
+	}
+
+	rule := nft.NewRule(table, chain, statements, nil, nil, "test")
+	config.AddRule(rule)
+
+	assert.NoError(t, nft.ApplyConfig(config))
+
+	//newConfig, err := nft.ReadConfig()
+	//assert.NoError(t, err)
+	//
+	//config = testlib.NormalizeConfigForComparison(config)
+	//newConfig = testlib.NormalizeConfigForComparison(newConfig)
+	//assert.Equal(t, config.Nftables, newConfig.Nftables)
+}
