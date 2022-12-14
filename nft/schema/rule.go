@@ -132,13 +132,19 @@ type Expression struct {
 }
 
 type SetElement struct {
-	Value    string    `json:"-"`
-	Range    *Range    `json:"-"`
-	IPPrefix *IPPrefix `json:"-"`
+	Value        string      `json:"-"`
+	Float64Value float64     `json:"-"`
+	Range        *Range      `json:"-"`
+	Float64Range *FloatRange `json:"-"`
+	IPPrefix     *IPPrefix   `json:"-"`
 }
 
 type Range struct {
 	Range [2]string `json:"range,omitempty"`
+}
+
+type FloatRange struct {
+	FloatRange [2]float64 `json:"range,omitempty"`
 }
 
 type IPPrefix struct {
@@ -347,8 +353,12 @@ func (s SetElement) MarshalJSON() ([]byte, error) {
 	switch {
 	case len(s.Value) != 0:
 		dynamicStruct = s.Value
+	case s.Float64Value != 0:
+		dynamicStruct = s.Float64Value
 	case s.Range != nil:
 		dynamicStruct = s.Range
+	case s.Float64Range != nil:
+		dynamicStruct = s.Float64Range
 	case s.IPPrefix != nil:
 		dynamicStruct = s.IPPrefix
 	default:
